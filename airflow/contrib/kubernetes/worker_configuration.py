@@ -38,6 +38,12 @@ class WorkerConfiguration(LoggingMixin):
     def _get_init_containers(self, volume_mounts):
         """When using git to retrieve the DAGs, use the GitSync Init Container"""
         # If we're using volume claims to mount the dags, no init container is needed
+        print("INside worker_configuration._get_init_containers, got called with volume_mounts:")
+        print(volume_mounts)
+        print("Inside Worker_configuration._get_init_containers, about to check the kube_config:")
+        print(self.kube_config)
+        print("Inside Worker_configuration._get_init_containers, the self.kube_config has __dict__:")
+        print(self.kube_config.__dict__)
         if self.kube_config.dags_volume_claim:
             return []
 
@@ -141,6 +147,8 @@ class WorkerConfiguration(LoggingMixin):
         dag_volume_mount_path = ""
 
         if self.kube_config.dags_volume_claim:
+            print("INside init_volumes_and_mounts, realized the kube_config has dags_volume_claim, so about to set the dag_volume_mount_path to self.worker_airflow_dags..")
+            print(self.worker_airflow_dags)
             dag_volume_mount_path = self.worker_airflow_dags
         else:
             dag_volume_mount_path = os.path.join(

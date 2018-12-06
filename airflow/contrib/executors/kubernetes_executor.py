@@ -307,6 +307,8 @@ class AirflowKubernetesScheduler(LoggingMixin):
         self.log.debug("Kubernetes using namespace %s", self.namespace)
         self.kube_client = kube_client
         self.launcher = PodLauncher(kube_client=self.kube_client)
+        print("INside AirflowKubernetesScheduler, about to construct a WorkerConfiguration object, with self.kube_config of:")
+        print(self.kube_config)
         self.worker_configuration = WorkerConfiguration(kube_config=self.kube_config)
         self.watcher_queue = multiprocessing.Queue()
         self._session = session
@@ -560,6 +562,7 @@ class KubernetesExecutor(BaseExecutor, LoggingMixin):
                 _create_or_update_secret(service_account['name'], service_account['path'])
 
     def start(self):
+        print("Inside KubernetesExecutor.start, got called...")
         self.log.info('Start Kubernetes executor')
         self._session = settings.Session()
         self.worker_uuid = KubeWorkerIdentifier.get_or_create_current_kube_worker_uuid(
@@ -573,6 +576,10 @@ class KubernetesExecutor(BaseExecutor, LoggingMixin):
         self.task_queue = Queue()
         self.result_queue = Queue()
         self.kube_client = get_kube_client()
+        print("Inside KubernetesExecutor.start, about to construct an AirflowKubernetesScheduler, with kube_config:")
+        print(self.kube_config)
+        print("The self.kube_config has __dict__")
+        print(self.kube_config.__dict__)
         self.kube_scheduler = AirflowKubernetesScheduler(
             self.kube_config, self.task_queue, self.result_queue, self._session,
             self.kube_client, self.worker_uuid
