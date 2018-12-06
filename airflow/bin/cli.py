@@ -509,9 +509,9 @@ def run(args, dag=None):
     print(args.__dict__)
     print("Insie cli.py, the run method, got called with dag:")
     print(dag)
-    print("The dag has __dict__:")
-    print(dag.__dict__)
     if dag:
+        print("The dag has __dict__:")
+        print(dag.__dict__)
         args.dag_id = dag.dag_id
 
     log = LoggingMixin().log
