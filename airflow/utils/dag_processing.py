@@ -287,6 +287,8 @@ def list_py_file_paths(directory, safe_mode=True,
     :return: a list of paths to Python files in the specified directory
     :rtype: list[unicode]
     """
+    print("Inside list_py_file_paths, got called with directory:")
+    print(directory)
     file_paths = []
     if directory is None:
         return []
@@ -295,6 +297,8 @@ def list_py_file_paths(directory, safe_mode=True,
     elif os.path.isdir(directory):
         patterns_by_dir = {}
         for root, dirs, files in os.walk(directory, followlinks=True):
+            print("Inside list_py_file_paths, realized the directory isdir, inside the walk loop, considering root, dirs, files:")
+            print(root, dirs, files)
             patterns = patterns_by_dir.get(root, [])
             ignore_file = os.path.join(root, '.airflowignore')
             if os.path.isfile(ignore_file):
@@ -349,6 +353,8 @@ def list_py_file_paths(directory, safe_mode=True,
         import airflow.example_dags
         example_dag_folder = airflow.example_dags.__path__[0]
         file_paths.extend(list_py_file_paths(example_dag_folder, safe_mode, False))
+    print("inside list_py_file_paths, about to return file_paths:")
+    print(file_paths)
     return file_paths
 
 
