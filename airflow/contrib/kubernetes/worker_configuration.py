@@ -134,10 +134,10 @@ class WorkerConfiguration(LoggingMixin):
             return volume
 
         volumes = [
-            _construct_volume(
-                dags_volume_name,
-                self.kube_config.dags_volume_claim
-            ),
+            #_construct_volume(
+            #    dags_volume_name,
+            #    self.kube_config.dags_volume_claim
+            #),
             _construct_volume(
                 logs_volume_name,
                 self.kube_config.logs_volume_claim
@@ -171,7 +171,7 @@ class WorkerConfiguration(LoggingMixin):
             logs_volume_mount['subPath'] = self.kube_config.logs_volume_subpath
 
         volume_mounts = [
-            dags_volume_mount,
+            #dags_volume_mount,
             logs_volume_mount
         ]
 
