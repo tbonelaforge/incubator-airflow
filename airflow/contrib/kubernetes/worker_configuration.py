@@ -163,7 +163,7 @@ class WorkerConfiguration(LoggingMixin):
             logs_volume_mount['subPath'] = self.kube_config.logs_volume_subpath
 
         volume_mounts = []
-        if not self.kube_config.dags_im_image:
+        if not self.kube_config.dags_in_image:
             volume_mounts.append(dags_volume_mount)
         volume_mounts.append(
             logs_volume_mount
