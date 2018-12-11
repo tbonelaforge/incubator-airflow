@@ -150,6 +150,10 @@ class KubeConfig:
         self.git_user = conf.get(self.kubernetes_section, 'git_user')
         self.git_password = conf.get(self.kubernetes_section, 'git_password')
 
+        # NOTE: The user may choose to build the dags directly into the worker image at path core.dags_folder.
+        # If so, dags_in_image should be set to true.
+        self.dags_in_image = conf.get(self.kubernetes_section, 'dags_in_image')
+
         # NOTE: The user may optionally use a volume claim to mount a PV containing
         # DAGs directly
         self.dags_volume_claim = conf.get(self.kubernetes_section, 'dags_volume_claim')
