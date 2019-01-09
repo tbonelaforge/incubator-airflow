@@ -112,6 +112,7 @@ class KubeConfig:
     kubernetes_section = 'kubernetes'
 
     def __init__(self):
+        print "Inside kubernetes_executor.py, the KubeConfig class __init__ method running Python coodddeee...z"
         configuration_dict = configuration.as_dict(display_sensitive=True)
         self.core_configuration = configuration_dict['core']
         self.kube_secrets = configuration_dict.get('kubernetes_secrets', {})
@@ -480,6 +481,7 @@ class AirflowKubernetesScheduler(LoggingMixin):
 
 class KubernetesExecutor(BaseExecutor, LoggingMixin):
     def __init__(self):
+        print "Inside kubernetes_executor.py, the KubernetesExecutor class __init__ method, about to construct a KubeConfig object..."
         self.kube_config = KubeConfig()
         self.task_queue = None
         self._session = None
