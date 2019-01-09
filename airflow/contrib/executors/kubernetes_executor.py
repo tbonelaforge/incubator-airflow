@@ -363,6 +363,10 @@ class AirflowKubernetesScheduler(LoggingMixin):
         self.log.debug("Kubernetes Job created!")
 
     def delete_pod(self, pod_id):
+        print "Inside AirflowKubernetesScheduler.delete_pod, got called with pod_id:"
+        print pod_id
+        print "Inside AirflowKubernetesScheduler.delete_pod, about to check self.kube_config, for delete_worker_pods..."
+        print self.kube_config.__dict__
         if self.kube_config.delete_worker_pods:
             try:
                 self.kube_client.delete_namespaced_pod(
@@ -632,7 +636,13 @@ class KubernetesExecutor(BaseExecutor, LoggingMixin):
                 self.task_queue.put(task)
 
     def _change_state(self, key, state, pod_id):
+        print "Inside kubernetes_executor._change_state, got called with key, state, and pod_id:"
+        print key
+        print state
+        print pod_id
         if state != State.RUNNING:
+            print "Inside kubernetes_executor._change_state, about to call kube_scheduler.delete_pod, with pod_id:"
+            print pod_id
             self.kube_scheduler.delete_pod(pod_id)
             try:
                 self.log.info('Deleted pod: %s', str(key))
