@@ -130,9 +130,11 @@ class KubeConfig:
             self.kubernetes_section, "worker_container_image_pull_policy"
         )
         self.kube_node_selectors = configuration_dict.get('kubernetes_node_selectors', {})
+        print "Inside KubeConfig.__init__, about to conf.getboolean, with self.kubernetes_section, and 'delete_worker_pods'..."
         self.delete_worker_pods = conf.getboolean(
             self.kubernetes_section, 'delete_worker_pods')
-
+        print "Inside KubeConfig.__init__, now the value is:"
+        print self.delete_worker_pods
         self.worker_service_account_name = conf.get(
             self.kubernetes_section, 'worker_service_account_name')
         self.image_pull_secrets = conf.get(self.kubernetes_section, 'image_pull_secrets')
