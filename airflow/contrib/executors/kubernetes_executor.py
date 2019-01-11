@@ -112,7 +112,6 @@ class KubeConfig:
     kubernetes_section = 'kubernetes'
 
     def __init__(self):
-        print "Inside kubernetes_executor.py, the KubeConfig class __init__ method running Python coodddeee...z"
         configuration_dict = configuration.as_dict(display_sensitive=True)
         self.core_configuration = configuration_dict['core']
         self.kube_secrets = configuration_dict.get('kubernetes_secrets', {})
@@ -131,11 +130,8 @@ class KubeConfig:
             self.kubernetes_section, "worker_container_image_pull_policy"
         )
         self.kube_node_selectors = configuration_dict.get('kubernetes_node_selectors', {})
-        print "Inside KubeConfig.__init__, about to conf.getboolean, with self.kubernetes_section, and 'delete_worker_pods'..."
         self.delete_worker_pods = conf.getboolean(
             self.kubernetes_section, 'delete_worker_pods')
-        print "Inside KubeConfig.__init__, now the value is:"
-        print self.delete_worker_pods
         self.worker_service_account_name = conf.get(
             self.kubernetes_section, 'worker_service_account_name')
         self.image_pull_secrets = conf.get(self.kubernetes_section, 'image_pull_secrets')
@@ -314,8 +310,6 @@ class AirflowKubernetesScheduler(LoggingMixin):
         self.log.debug("Kubernetes using namespace %s", self.namespace)
         self.kube_client = kube_client
         self.launcher = PodLauncher(kube_client=self.kube_client)
-        print("INside AirflowKubernetesScheduler, about to construct a WorkerConfiguration object, with self.kube_config of:")
-        print(self.kube_config)
         self.worker_configuration = WorkerConfiguration(kube_config=self.kube_config)
         self.watcher_queue = multiprocessing.Queue()
         self._session = session
@@ -364,10 +358,6 @@ class AirflowKubernetesScheduler(LoggingMixin):
         self.log.debug("Kubernetes Job created!")
 
     def delete_pod(self, pod_id):
-        print "Inside AirflowKubernetesScheduler.delete_pod, got called with pod_id:"
-        print pod_id
-        print "Inside AirflowKubernetesScheduler.delete_pod, about to check self.kube_config, for delete_worker_pods..."
-        print self.kube_config.__dict__
         if self.kube_config.delete_worker_pods:
             try:
                 self.kube_client.delete_namespaced_pod(
@@ -486,7 +476,6 @@ class AirflowKubernetesScheduler(LoggingMixin):
 
 class KubernetesExecutor(BaseExecutor, LoggingMixin):
     def __init__(self):
-        print "Inside kubernetes_executor.py, the KubernetesExecutor class __init__ method, about to construct a KubeConfig object..."
         self.kube_config = KubeConfig()
         self.task_queue = None
         self._session = None
@@ -575,7 +564,6 @@ class KubernetesExecutor(BaseExecutor, LoggingMixin):
                 _create_or_update_secret(service_account['name'], service_account['path'])
 
     def start(self):
-        print("Inside KubernetesExecutor.start, got called...")
         self.log.info('Start Kubernetes executor')
         self._session = settings.Session()
         self.worker_uuid = KubeWorkerIdentifier.get_or_create_current_kube_worker_uuid(
@@ -589,10 +577,6 @@ class KubernetesExecutor(BaseExecutor, LoggingMixin):
         self.task_queue = Queue()
         self.result_queue = Queue()
         self.kube_client = get_kube_client()
-        print("Inside KubernetesExecutor.start, about to construct an AirflowKubernetesScheduler, with kube_config:")
-        print(self.kube_config)
-        print("The self.kube_config has __dict__")
-        print(self.kube_config.__dict__)
         self.kube_scheduler = AirflowKubernetesScheduler(
             self.kube_config, self.task_queue, self.result_queue, self._session,
             self.kube_client, self.worker_uuid
@@ -637,13 +621,7 @@ class KubernetesExecutor(BaseExecutor, LoggingMixin):
                 self.task_queue.put(task)
 
     def _change_state(self, key, state, pod_id):
-        print "Inside kubernetes_executor._change_state, got called with key, state, and pod_id:"
-        print key
-        print state
-        print pod_id
         if state != State.RUNNING:
-            print "Inside kubernetes_executor._change_state, about to call kube_scheduler.delete_pod, with pod_id:"
-            print pod_id
             self.kube_scheduler.delete_pod(pod_id)
             try:
                 self.log.info('Deleted pod: %s', str(key))

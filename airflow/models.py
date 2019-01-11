@@ -542,8 +542,6 @@ class DagBag(BaseDagBag, LoggingMixin):
         **Note**: The patterns in .airflowignore are treated as
         un-anchored regexes, not shell-like glob patterns.
         """
-        print("Inside collect_dags, got  called with dag_folder:")
-        print(dag_folder)
         start_dttm = timezone.utcnow()
         dag_folder = dag_folder or self.dag_folder
 
@@ -552,8 +550,6 @@ class DagBag(BaseDagBag, LoggingMixin):
         FileLoadStat = namedtuple(
             'FileLoadStat', "file duration dag_num task_num dags")
         for filepath in list_py_file_paths(dag_folder, include_examples):
-            print("INside collect_dags, considering filepath:")
-            print(filepath)
             try:
                 ts = timezone.utcnow()
                 found_dags = self.process_file(

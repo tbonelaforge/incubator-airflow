@@ -287,20 +287,14 @@ def list_py_file_paths(directory, safe_mode=True,
     :return: a list of paths to Python files in the specified directory
     :rtype: list[unicode]
     """
-    print("Inside list_py_file_paths, got called with directory:")
-    print(directory)
     file_paths = []
     if directory is None:
         return []
     elif os.path.isfile(directory):
-        print("Inside list_py_file_paths, I think the directory is a file!")
         return [directory]
     elif os.path.isdir(directory):
-        print("Inside list_py_file_paths, I think the directory is a directory...")
         patterns_by_dir = {}
         for root, dirs, files in os.walk(directory, followlinks=True):
-            print("Inside list_py_file_paths, realized the directory isdir, inside the walk loop, considering root, dirs, files:")
-            print(root, dirs, files)
             patterns = patterns_by_dir.get(root, [])
             ignore_file = os.path.join(root, '.airflowignore')
             if os.path.isfile(ignore_file):
@@ -351,14 +345,10 @@ def list_py_file_paths(directory, safe_mode=True,
                 except Exception:
                     log = LoggingMixin().log
                     log.exception("Error while examining %s", f)
-    else:
-        print("Inside list_py_file_paths, I think the directory is neither a file nor a directory...")
     if include_examples:
         import airflow.example_dags
         example_dag_folder = airflow.example_dags.__path__[0]
         file_paths.extend(list_py_file_paths(example_dag_folder, safe_mode, False))
-    print("inside list_py_file_paths, about to return file_paths:")
-    print(file_paths)
     return file_paths
 
 

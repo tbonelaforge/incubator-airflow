@@ -137,25 +137,13 @@ def setup_locations(process, pid=None, stdout=None, stderr=None, log=None):
 
 def process_subdir(subdir):
     if subdir:
-        print("Inside process_subdir, realized we have a subdir to process, about to replace DAGS_FOLDER with:")
-        print(DAGS_FOLDER)
         subdir = subdir.replace('DAGS_FOLDER', DAGS_FOLDER)
-        print("Inside process_subdir, after replacing the placeholder for DAGS_FOLDER, we now have subdir:")
-        print(subdir)
         subdir = os.path.abspath(os.path.expanduser(subdir))
-        print("Inside process_subdir, after taking the abspath, we now have subdir:")
-        print(subdir)
         return subdir
 
 
 def get_dag(args):
-    print("Inside cli.py, the get_dag function, got called with args:")
-    print(args)
-    print("Inside cli.py, about to process_subdir, with subdir:")
-    print(args.subdir)
     dagbag = DagBag(process_subdir(args.subdir))
-    print("Inside get_dag, the dagbag.dags is:")
-    print(dagbag.dags)
     if args.dag_id not in dagbag.dags:
         raise AirflowException(
             'dag_id could not be found: {}. Either the dag did not exist or it failed to '
@@ -446,10 +434,6 @@ def set_is_paused(is_paused, args, dag=None):
 
 
 def _run(args, dag, ti):
-    print("Inside cli.py, the _run method, got called with args, dag, ti")
-    print(args)
-    print(dag)
-    print(ti)
     if args.local:
         run_job = jobs.LocalTaskJob(
             task_instance=ti,
@@ -503,22 +487,13 @@ def _run(args, dag, ti):
 
 @cli_utils.action_logging
 def run(args, dag=None):
-    print("INside cli.py, the run method, got called with args:")
-    print(args)
-    print("Inside cli.py, the run method, args.__dict__ is:")
-    print(args.__dict__)
-    print("Insie cli.py, the run method, got called with dag:")
-    print(dag)
     if dag:
-        print("The dag has __dict__:")
-        print(dag.__dict__)
         args.dag_id = dag.dag_id
 
     log = LoggingMixin().log
 
     # Load custom airflow config
     if args.cfg_path:
-        print("INside cli.py, realized the args have cfg_path")
         with open(args.cfg_path, 'r') as conf_file:
             conf_dict = json.load(conf_file)
 
@@ -535,7 +510,6 @@ def run(args, dag=None):
     settings.configure_orm(disable_connection_pool=True)
 
     if not args.pickle and not dag:
-        print("Inside cli.py, the run method, realized not args.pickle, and not dag, about to call get_dag, with args...")
         dag = get_dag(args)
     elif not dag:
         session = settings.Session()
@@ -556,14 +530,9 @@ def run(args, dag=None):
     log.info("Running %s on host %s", ti, hostname)
 
     if args.interactive:
-        print("Inside cli.py, the run method, realized we have args.interactive...")
         _run(args, dag, ti)
     else:
-        print("INside cli.py, the run method, realized we do not have args.interactive...")
         with redirect_stdout(ti.log, logging.INFO), redirect_stderr(ti.log, logging.WARN):
-            print("Inside cli.py, the run method, after having redirected stdout, about to _run, with TaskInstance ti:")
-            print(ti)
-            print(ti.__dict__)
             _run(args, dag, ti)
     logging.shutdown()
 
