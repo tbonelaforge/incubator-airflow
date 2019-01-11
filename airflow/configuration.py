@@ -459,9 +459,6 @@ if 'AIRFLOW_CONFIG' not in os.environ:
 else:
     AIRFLOW_CONFIG = expand_env_var(os.environ['AIRFLOW_CONFIG'])
 
-print("Inside configuration.py, we have determined the AIRFLOW_CONFIG is:")
-print(AIRFLOW_CONFIG)
-
 # Set up dags folder for unit tests
 # this directory won't exist if users install via pip
 _TEST_DAGS_FOLDER = os.path.join(
@@ -514,9 +511,6 @@ if not os.path.isfile(TEST_CONFIG_FILE):
         cfg = parameterized_config(TEST_CONFIG)
         f.write(cfg.split(TEMPLATE_START)[-1].strip())
 if not os.path.isfile(AIRFLOW_CONFIG):
-    print("Inside configuration.py, realized the AIRFLOW_CONFIG is not a file:")
-    print(AIRFLOW_CONFIG)
-    print("ABOUT TO CREATE A NEW CONFIG FILE!!!")
     log.info(
         'Creating new Airflow config file in: %s',
         AIRFLOW_CONFIG

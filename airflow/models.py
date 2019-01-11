@@ -282,8 +282,6 @@ class DagBag(BaseDagBag, LoggingMixin):
         # do not use default arg in signature, to fix import cycle on plugin load
         if executor is None:
             executor = GetDefaultExecutor()
-        print("INside models.DagBag.__init__, got called with dag_folder:")
-        print(dag_folder)
         dag_folder = dag_folder or settings.DAGS_FOLDER
         self.log.info("Filling up the DagBag from %s", dag_folder)
         self.dag_folder = dag_folder
