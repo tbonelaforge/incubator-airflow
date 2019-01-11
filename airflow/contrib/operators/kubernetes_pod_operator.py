@@ -100,7 +100,8 @@ class KubernetesPodOperator(BaseOperator):
                 gen.add_mount(mount)
             for volume in self.volumes:
                 gen.add_volume(volume)
-
+            print "INSIDE kubernetes_pod_operator.py, the KubernetesPodOperator.execute method, about to PodGenerator.make_pod, with image:"
+            print self.image
             pod = gen.make_pod(
                 namespace=self.namespace,
                 image=self.image,
@@ -114,6 +115,8 @@ class KubernetesPodOperator(BaseOperator):
             pod.secrets = self.secrets
             pod.envs = self.env_vars
             pod.image_pull_policy = self.image_pull_policy
+            print "INSIDE kubernetes_pod_operator.py, the KubernetesPodOperator.execute method, about to set the newly-generated pod's image_pull_secrets to:"
+            print pod.image_pull_secrets
             pod.image_pull_secrets = self.image_pull_secrets
             pod.annotations = self.annotations
             pod.resources = self.resources

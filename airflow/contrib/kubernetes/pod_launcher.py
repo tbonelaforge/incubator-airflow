@@ -51,6 +51,8 @@ class PodLauncher(LoggingMixin):
     def run_pod_async(self, pod):
         req = self.kube_req_factory.create(pod)
         self.log.debug('Pod Creation Request: \n%s', json.dumps(req, indent=2))
+        print "INSIDE pod_launcher.run_pod_async, there is a pod creation request..."
+        print json.dumps(req, indent=4)
         try:
             resp = self._client.create_namespaced_pod(body=req, namespace=pod.namespace)
             self.log.debug('Pod Creation Response: %s', resp)

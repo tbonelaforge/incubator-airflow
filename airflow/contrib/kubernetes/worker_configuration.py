@@ -106,9 +106,13 @@ class WorkerConfiguration(LoggingMixin):
         return worker_secrets
 
     def _get_image_pull_secrets(self):
+        print "INSIDE worker_configuration.py, the WorkerConfiguration._get_image_pull_secrets method, got called..."
         """Extracts any image pull secrets for fetching container(s)"""
         if not self.kube_config.image_pull_secrets:
+            print "INSIDE worker_configuration.py, the WorkerConfiguration._get_image_pull_secrets method, realized self.kube_config does not contain image_pull_secrets, about to return []"
             return []
+        print "INSIDE worker_configuration.py, the WorkerConfiguration._get_image_pull_secrets method, about to return self.kube_config.image_pull_secrets.split(',')..."
+        print self.kube_config.image_pull_secrets.split(',')
         return self.kube_config.image_pull_secrets.split(',')
 
     def init_volumes_and_mounts(self):
@@ -205,7 +209,8 @@ class WorkerConfiguration(LoggingMixin):
         annotations = kube_executor_config.annotations.copy()
         if gcp_sa_key:
             annotations['iam.cloud.google.com/service-account'] = gcp_sa_key
-
+        print "INSIDE worker_configuration.py, WorkerConfiguration.make_pod, about to construct a Pod object, with image_pull_secrets="
+        print self.kube_config.image_pull_secrets
         return Pod(
             namespace=namespace,
             name=pod_id,
