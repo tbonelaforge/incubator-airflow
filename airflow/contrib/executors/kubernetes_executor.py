@@ -140,8 +140,7 @@ class KubeConfig:
             self.kubernetes_section, 'worker_service_account_name')
         self.image_pull_secrets = conf.get(self.kubernetes_section, 'image_pull_secrets')
         print "INSIDE kubernetes_executor, the KubeConfig.__init__, just obtained self.image_pull_secrets of:"
-        self.log.debug("INSIDE INSIDE kubernetes_executor, the KubeConfig.__init__, just obtained self.image_pull_secrets of:")
-        self.log.debug(self.image_pull_secrets)
+        print self.image_pull_secrets
 
         # NOTE: `git_repo` and `git_branch` must be specified together as a pair
         # The http URL of the git repository to clone from
